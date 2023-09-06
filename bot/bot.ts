@@ -30,7 +30,9 @@ bot.command("reset", async (ctx) => {
 });
 
 bot.command("correct", async (ctx) => {
-  // get the quoted message
+  if (ctx.session.token !== process.env.TOKEN) {
+    return ctx.reply("Please login first.");
+  }
   const message = ctx.message?.reply_to_message;
   if (!message) {
     return ctx.reply("Please quote the message you want to correct.");
