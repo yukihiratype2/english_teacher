@@ -1,10 +1,10 @@
 import assert from 'assert';
 import { Bot, InputFile, session, webhookCallback } from "grammy";
 import { SocksProxyAgent } from "socks-proxy-agent";
-import teacher from './teacher';
 import { TeacherContext, initial } from './session';
 import { ChatRole } from './types';
 import { textToSpeech } from './speech';
+import { corrector, teacher } from './teacher';
 
 const socksAgent = new SocksProxyAgent('socks://127.0.0.1:7890');
 
@@ -28,6 +28,21 @@ bot.command("reset", async (ctx) => {
   ctx.session.messages = [];
   ctx.reply("Conversation reset successfully, teacher is ready to talk again.");
 });
+
+bot.command("correct", async (ctx) => {
+  // get the quoted message
+  const message = ctx.message?.reply_to_message;
+  if (!message) {
+    return ctx.reply("Please quote the message you want to correct.");
+  }
+  if (!message.text) {
+    return ctx.reply("Only text message can be corrected.");
+  }
+  const text = message.text;
+  const corrected = await corrector(text);
+  ctx.replyWithChatAction('typing')
+  ctx.reply(corrected.content ?? '', {});
+})
 
 bot.command("login", async (ctx) => {
   const token = ctx.match;
@@ -82,6 +97,7 @@ bot.on("message", async (ctx) => {
 await bot.api.setMyCommands([
   { command: "reset", description: "Reset conversation" },
   { command: "login", description: "Login" },
+  { command: "correct", description: "Correct quoted message" },
 ]);
 
 export default bot;
