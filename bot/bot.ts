@@ -6,6 +6,7 @@ import { textToSpeech } from './speech';
 import { corrector, teacher } from './teacher';
 import { PsqlAdapter } from '@grammyjs/storage-psql';
 import { createClient } from '@vercel/postgres';
+import { PassThrough } from 'stream';
 
 
 const token = process.env.TELEGRAM_TOKEN;
@@ -88,13 +89,16 @@ bot.on("message", async (ctx) => {
         text: res.content ?? '',
       })
 
-      const speechStream = await textToSpeech(res.content ?? '');
+      const speechStream = textToSpeech(res.content ?? '');
 
       ctx.reply(res.content ?? '', {});
 
       if (speechStream) {
+        const buffer = Buffer.from(await speechStream);
+        const stream = new PassThrough();
+        stream.end(buffer);
         await ctx.replyWithVoice(
-          new InputFile(speechStream),
+          new InputFile(stream),
         );
       }
 

@@ -18,7 +18,7 @@ export async function teacher(response: string, history: ChatMessage[]) {
       role: 'user',
       content: response,
     }],
-    temperature: 0.8,
+    temperature: 0.9,
     model: 'gpt-3.5-turbo',
   });
   return completion.choices[0].message;
