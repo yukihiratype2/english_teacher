@@ -39,9 +39,9 @@ bot.command("reset", async (ctx) => {
 });
 
 bot.command("correct", async (ctx) => {
-  // if (ctx.session.token !== process.env.TOKEN) {
-  //   return ctx.reply("Please login first.");
-  // }
+  if (ctx.session.token !== process.env.TOKEN) {
+    return ctx.reply("Please login first.");
+  }
   const message = ctx.message?.reply_to_message;
   if (!message) {
     return ctx.reply("Please quote the message you want to correct.");
@@ -52,7 +52,9 @@ bot.command("correct", async (ctx) => {
   const text = message.text;
   const corrected = await corrector(text);
   ctx.replyWithChatAction('typing')
-  ctx.reply(corrected.content ?? '', {});
+  ctx.reply(corrected.content ?? '', {
+    reply_to_message_id: message.message_id,
+  });
 })
 
 bot.command("login", async (ctx) => {
@@ -66,9 +68,9 @@ bot.command("login", async (ctx) => {
 });
 
 bot.on("message", async (ctx) => {
-  // if (ctx.session.token !== process.env.TOKEN) {
-  //   return ctx.reply("Please login first.");
-  // }
+  if (ctx.session.token !== process.env.TOKEN) {
+    return ctx.reply("Please login first.");
+  }
   const history = ctx.session.messages;
 
   if (history.length > 15) {
