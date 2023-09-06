@@ -33,8 +33,9 @@ bot.command("login", async (ctx) => {
   const token = ctx.message?.text?.split(' ')[1];
   if (token === process.env.TOKEN) {
     ctx.session.token = token;
+  } else {
+    return ctx.reply("Login failed. Enter /login <token> to login.");
   }
-  ctx.reply("Login successfully.");
 });
 
 bot.on("message", async (ctx) => {
