@@ -58,18 +58,25 @@ bot.command("correct", async (ctx) => {
 })
 
 bot.command("login", async (ctx) => {
+  if (ctx.session.token === process.env.TOKEN) {
+    ctx.reply("You have already logged in.");
+    return;
+  }
   const token = ctx.match;
   if (token === process.env.TOKEN) {
     ctx.session.token = token;
-    return ctx.reply("Login successfully.");
+    ctx.reply("Login successfully.");
+    return;
   } else {
-    return ctx.reply("Login failed. Enter /login <token> to login.");
+    ctx.reply("Login failed. Enter /login <token> to login.");
+    return;
   }
 });
 
 bot.on("message", async (ctx) => {
   if (ctx.session.token !== process.env.TOKEN) {
-    return ctx.reply("Please login first.");
+    ctx.reply("Please login first.");
+    return;
   }
   const history = ctx.session.messages;
 
@@ -102,7 +109,7 @@ bot.on("message", async (ctx) => {
 
     } catch (error) {
       console.error(error);
-      return ctx.reply('Error', {});
+      ctx.reply('Error', {});
     }
   }
 });
