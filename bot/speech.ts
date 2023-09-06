@@ -13,7 +13,7 @@ async function textToSpeech(text: string): Promise<PassThrough> {
   );
 
   speechConfig.speechSynthesisOutputFormat =
-    sdk.SpeechSynthesisOutputFormat.Ogg24Khz16BitMonoOpus;
+    sdk.SpeechSynthesisOutputFormat.Ogg16Khz16BitMonoOpus;
 
   speechConfig.speechSynthesisVoiceName = "en-US-AriaNeural"
 
