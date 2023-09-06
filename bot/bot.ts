@@ -93,16 +93,9 @@ bot.on("message", async (ctx) => {
       ctx.reply(res.content ?? '', {});
 
       if (speechStream) {
-        const chunks: any = [];
-        speechStream.on('data', (chunk) => {
-          chunks.push(chunk);
-        });
-        speechStream.on('end', () => {
-          // log chunk size
-          console.log(Buffer.concat(chunks).length);
-          const buffer = Buffer.concat(chunks);
-          ctx.replyWithVoice(new InputFile(buffer));
-        });
+        await ctx.replyWithVoice(
+          new InputFile(speechStream),
+        );
       }
 
 
