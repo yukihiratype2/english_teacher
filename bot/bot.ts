@@ -91,7 +91,7 @@ bot.on("message", async (ctx) => {
 
       const speechStream = textToSpeech(res.content ?? '');
 
-      ctx.reply(res.content ?? '', {});
+      await ctx.reply(res.content ?? '', {});
 
       if (speechStream) {
         const buffer = Buffer.from(await speechStream);
