@@ -5,6 +5,8 @@ import { TeacherContext, initial } from './session';
 import { ChatRole } from './types';
 import { textToSpeech } from './speech';
 import { corrector, teacher } from './teacher';
+import { PsqlAdapter } from '@grammyjs/storage-psql';
+import { createClient } from '@vercel/postgres';
 
 const socksAgent = new SocksProxyAgent('socks://127.0.0.1:7890');
 
@@ -22,7 +24,14 @@ const bot = new Bot<TeacherContext>(token, {
   client
 });
 
-bot.use(session({ initial }))
+const pgClient = createClient();
+
+await pgClient.connect();
+
+bot.use(session({
+  initial,
+  storage: await PsqlAdapter.create({ tableName: 'sessions', client: pgClient }),
+}))
 
 bot.command("reset", async (ctx) => {
   ctx.session.messages = [];

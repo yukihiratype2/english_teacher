@@ -10,6 +10,7 @@
     "ngrok": "ngrok http 3000"
   },
   "dependencies": {
+    "@grammyjs/storage-psql": "^2.3.2",
     "@types/node": "20.5.9",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
