@@ -30,9 +30,9 @@ bot.command("reset", async (ctx) => {
 });
 
 bot.command("correct", async (ctx) => {
-  if (ctx.session.token !== process.env.TOKEN) {
-    return ctx.reply("Please login first.");
-  }
+  // if (ctx.session.token !== process.env.TOKEN) {
+  //   return ctx.reply("Please login first.");
+  // }
   const message = ctx.message?.reply_to_message;
   if (!message) {
     return ctx.reply("Please quote the message you want to correct.");
@@ -57,9 +57,9 @@ bot.command("login", async (ctx) => {
 });
 
 bot.on("message", async (ctx) => {
-  if (ctx.session.token !== process.env.TOKEN) {
-    return ctx.reply("Please login first.");
-  }
+  // if (ctx.session.token !== process.env.TOKEN) {
+  //   return ctx.reply("Please login first.");
+  // }
   const history = ctx.session.messages;
 
   if (history.length > 15) {
