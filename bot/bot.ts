@@ -1,6 +1,5 @@
 import assert from 'assert';
-import { Bot, InputFile, session, webhookCallback } from "grammy/web";
-import { SocksProxyAgent } from "socks-proxy-agent";
+import { Bot, InputFile, session, webhookCallback } from "grammy";
 import { TeacherContext, initial } from './session';
 import { ChatRole } from './types';
 import { textToSpeech } from './speech';
@@ -8,20 +7,13 @@ import { corrector, teacher } from './teacher';
 import { PsqlAdapter } from '@grammyjs/storage-psql';
 import { createClient } from '@vercel/postgres';
 
-const socksAgent = new SocksProxyAgent('socks://127.0.0.1:7890');
 
 const token = process.env.TELEGRAM_TOKEN;
 
-const client = process.env.ENV === 'developent' ? {
-  baseFetchConfig: {
-    agent: socksAgent,
-  }
-} : undefined;
 
 assert(token, 'Missing TELEGRAM_TOKEN');
 
 const bot = new Bot<TeacherContext>(token, {
-  client
 });
 
 const pgClient = createClient();
