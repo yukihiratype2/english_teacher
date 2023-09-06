@@ -30,7 +30,7 @@ bot.command("reset", async (ctx) => {
 });
 
 bot.command("login", async (ctx) => {
-  const token = ctx.message?.text?.split(' ')[1];
+  const token = ctx.match;
   if (token === process.env.TOKEN) {
     ctx.session.token = token;
   } else {
