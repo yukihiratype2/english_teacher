@@ -6,7 +6,7 @@ export const config = {
   runtime: 'edge',
 };
 
-const hook = webhookCallback(bot, 'next-js');
+const hook = webhookCallback(bot, 'https');
  
 export default function handler(
   request: NextApiRequest,

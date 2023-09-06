@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { Bot, InputFile, session, webhookCallback } from "grammy";
+import { Bot, InputFile, session, webhookCallback } from "grammy/web";
 import { SocksProxyAgent } from "socks-proxy-agent";
 import { TeacherContext, initial } from './session';
 import { ChatRole } from './types';
@@ -109,7 +109,7 @@ bot.on("message", async (ctx) => {
 
     } catch (error) {
       console.error(error);
-      ctx.reply('Error', {});
+      return ctx.reply('Error', {});
     }
   }
 });
