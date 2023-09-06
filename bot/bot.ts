@@ -1,15 +1,26 @@
 import assert from 'assert';
 import { Bot, InputFile, session, webhookCallback } from "grammy";
+import { SocksProxyAgent } from "socks-proxy-agent";
 import teacher from './teacher';
 import { TeacherContext, initial } from './session';
 import { ChatRole } from './types';
 import { textToSpeech } from './speech';
 
+const socksAgent = new SocksProxyAgent('socks://127.0.0.1:7890');
+
 const token = process.env.TELEGRAM_TOKEN;
+
+const client = process.env.ENV === 'developent' ? {
+  baseFetchConfig: {
+    agent: socksAgent,
+  }
+} : undefined;
 
 assert(token, 'Missing TELEGRAM_TOKEN');
 
-const bot = new Bot<TeacherContext>(token);
+const bot = new Bot<TeacherContext>(token, {
+  client
+});
 
 bot.use(session({ initial }))
 
