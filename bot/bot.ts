@@ -93,9 +93,14 @@ bot.on("message", async (ctx) => {
       ctx.reply(res.content ?? '', {});
 
       if (speechStream) {
-        ctx.replyWithVoice(
-          new InputFile(speechStream),
-        );
+        const chunks: any = [];
+        speechStream.on('data', (chunk) => {
+          chunks.push(chunk);
+        });
+        speechStream.on('end', () => {
+          const buffer = Buffer.concat(chunks);
+          ctx.replyWithVoice(new InputFile(buffer));
+        });
       }
 
 
