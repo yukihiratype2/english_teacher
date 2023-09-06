@@ -98,6 +98,8 @@ bot.on("message", async (ctx) => {
           chunks.push(chunk);
         });
         speechStream.on('end', () => {
+          // log chunk size
+          console.log(Buffer.concat(chunks).length);
           const buffer = Buffer.concat(chunks);
           ctx.replyWithVoice(new InputFile(buffer));
         });
