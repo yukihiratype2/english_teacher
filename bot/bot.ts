@@ -33,6 +33,7 @@ bot.command("login", async (ctx) => {
   const token = ctx.match;
   if (token === process.env.TOKEN) {
     ctx.session.token = token;
+    return ctx.reply("Login successfully.");
   } else {
     return ctx.reply("Login failed. Enter /login <token> to login.");
   }
