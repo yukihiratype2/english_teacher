@@ -5,7 +5,7 @@ import { PassThrough } from "stream";
 const subscriptionKey = process.env.SPEECH_SUBSCRIPTION_KEY;
 const serviceRegion = "eastasia"
 
-async function textToSpeech(text: string): Promise<PassThrough> {
+async function textToSpeech(text: string): Promise<ArrayBuffer> {
   assert(subscriptionKey, 'Missing SPEECH_SUBSCRIPTION_KEY');
   const speechConfig = sdk.SpeechConfig.fromSubscription(
     subscriptionKey,
@@ -24,9 +24,7 @@ async function textToSpeech(text: string): Promise<PassThrough> {
       text,
       (result: sdk.SpeechSynthesisResult) => {
         if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
-          const bufferStream = new PassThrough();
-          bufferStream.end(Buffer.from(result.audioData));
-          resolve(bufferStream);
+          resolve(result.audioData);
         } else {
           reject(new Error(result.errorDetails));
         }
