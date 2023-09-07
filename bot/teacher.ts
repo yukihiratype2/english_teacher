@@ -29,7 +29,7 @@ export async function corrector(text: string) {
   const completion = await openai.chat.completions.create({
     messages: [{ role: 'system', content: systemPrompt }, {
       role: 'user',
-      content: text,
+      content: 'Your are an English teacher and you sill correct any mistakes and errors in following content:\n'  + text,
     }],
     temperature: 0.5,
     model: 'gpt-3.5-turbo',

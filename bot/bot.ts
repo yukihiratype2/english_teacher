@@ -1,29 +1,36 @@
 import assert from 'assert';
 import { Bot, InputFile, session, webhookCallback } from "grammy";
-import { TeacherContext, initial } from './session';
+import { TeacherContext, initial, SessionData } from './session';
 import { ChatRole } from './types';
 import { textToSpeech } from './speech';
 import { corrector, teacher } from './teacher';
-import { PsqlAdapter } from '@grammyjs/storage-psql';
-import { createClient } from '@vercel/postgres';
 import { PassThrough } from 'stream';
+import { SocksProxyAgent } from "socks-proxy-agent";
+import { freeStorage } from '@grammyjs/storage-free';
+
+const socksAgent = new SocksProxyAgent('socks://localhost:7890');
+
+const client = {
+  baseFetchConfig: {
+    agent: socksAgent,
+    compress: true,
+  },
+}
 
 
 const token = process.env.TELEGRAM_TOKEN;
 
-
 assert(token, 'Missing TELEGRAM_TOKEN');
 
 const bot = new Bot<TeacherContext>(token, {
+  client
 });
 
-const pgClient = createClient();
 
-await pgClient.connect();
 
 bot.use(session({
   initial,
-  storage: await PsqlAdapter.create({ tableName: 'sessions', client: pgClient }),
+  storage: freeStorage<SessionData>(bot.token),
 }))
 
 bot.command("reset", async (ctx) => {
@@ -110,10 +117,12 @@ bot.on("message", async (ctx) => {
   }
 });
 
-await bot.api.setMyCommands([
+bot.api.setMyCommands([
   { command: "reset", description: "Reset conversation" },
   { command: "login", description: "Login" },
   { command: "correct", description: "Correct quoted message" },
-]);
+]).catch(err => {
+  console.error('Error occurred setting commands', err)
+});
 
 export default bot;

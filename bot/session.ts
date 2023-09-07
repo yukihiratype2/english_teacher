@@ -2,7 +2,7 @@ import { Bot, Context, session, SessionFlavor } from "grammy";
 import { ChatMessage } from "./types";
 
 
-interface SessionData {
+export interface SessionData {
   messages: ChatMessage[],
   token?: string,
 }
