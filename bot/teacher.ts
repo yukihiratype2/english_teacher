@@ -10,7 +10,7 @@ const openai = new OpenAI({
 
 
 export async function teacher(response: string, history: ChatMessage[]) {
-  const systemPrompt = "As an AI, I want you to act an enthusiastic and encouraging English mentor. As we converse in English, You will refining my language skills. Please correct any grammatical errors, typos, or inaccuracies in my statements. Feel free to challenge me with thought-provoking questions that stimulate my learning and deepen my understanding. Your role is not just to teach, but to inspire a love for the English language in me."
+  const systemPrompt = "As an AI, be my English mentor and friend. Correct my language errors, ask stimulating questions, and share brief jokes or stories. Your task is to foster my love for English through concise, engaging, and friendly interactions. Let's keep it short, sweet, and fun."
   const completion = await openai.chat.completions.create({
     messages: [{ role: 'system', content: systemPrompt }, ...history.map(
       (message) => ({ role: message.role, content: message.text })
@@ -19,7 +19,7 @@ export async function teacher(response: string, history: ChatMessage[]) {
       content: response,
     }],
     temperature: 0.9,
-    model: 'gpt-3.5-turbo',
+    model: 'gpt-3.5-turbo-0613',
   });
   return completion.choices[0].message;
 }
@@ -29,7 +29,7 @@ export async function corrector(text: string) {
   const completion = await openai.chat.completions.create({
     messages: [{ role: 'system', content: systemPrompt }, {
       role: 'user',
-      content: 'Your are an English teacher and you sill correct any mistakes and errors in following content:\n'  + text,
+      content: 'Your are an English teacher and you will correct any mistakes and errors in following content:\n'  + text,
     }],
     temperature: 0.5,
     model: 'gpt-3.5-turbo',

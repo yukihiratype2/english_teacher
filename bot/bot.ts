@@ -26,8 +26,6 @@ const bot = new Bot<TeacherContext>(token, {
   client
 });
 
-
-
 bot.use(session({
   initial,
   storage: freeStorage<SessionData>(bot.token),
