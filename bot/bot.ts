@@ -23,7 +23,7 @@ const token = process.env.TELEGRAM_TOKEN;
 assert(token, 'Missing TELEGRAM_TOKEN');
 
 const bot = new Bot<TeacherContext>(token, {
-  client
+  client: process.env.NODE_ENV !== 'production' ? client : undefined,
 });
 
 bot.use(session({
