@@ -71,6 +71,11 @@ bot.command("login", async (ctx) => {
   }
 });
 
+bot.command("toggle_speech", async (ctx) => {
+  ctx.session.tts = !ctx.session.tts;
+  ctx.reply(`Speech cognitive is now ${ctx.session.tts ? 'enabled' : 'disabled'}.`);
+})
+
 bot.on("message", async (ctx) => {
   if (ctx.session.token !== process.env.TOKEN) {
     ctx.reply("Please login first.");
@@ -94,19 +99,19 @@ bot.on("message", async (ctx) => {
         text: res.content ?? '',
       })
 
-      const speechStream = textToSpeech(res.content ?? '');
-
-      await ctx.reply(res.content ?? '', {});
-
-      if (speechStream) {
-        const buffer = Buffer.from(await speechStream);
-        const stream = new PassThrough();
-        stream.end(buffer);
-        await ctx.replyWithVoice(
-          new InputFile(stream),
-        );
+      if (ctx.session.tts) {
+        const speechStream = textToSpeech(res.content ?? '');
+        if (speechStream) {
+          const buffer = Buffer.from(await speechStream);
+          const stream = new PassThrough();
+          stream.end(buffer);
+          await ctx.replyWithVoice(
+            new InputFile(stream),
+          );
+        }
       }
 
+      await ctx.reply(res.content ?? '', {});
 
     } catch (error) {
       console.error(error);
@@ -119,6 +124,7 @@ bot.api.setMyCommands([
   { command: "reset", description: "Reset conversation" },
   { command: "login", description: "Login" },
   { command: "correct", description: "Correct quoted message" },
+  { command: "toggle_speech", description: "Toggle speech cognitive" },
 ]).catch(err => {
   console.error('Error occurred setting commands', err)
 });
