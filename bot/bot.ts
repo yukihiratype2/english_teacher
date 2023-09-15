@@ -72,8 +72,8 @@ bot.command("login", async (ctx) => {
 });
 
 bot.command("toggle_speech", async (ctx) => {
-  ctx.session.tts = !ctx.session.tts;
-  ctx.reply(`Speech cognitive is now ${ctx.session.tts ? 'enabled' : 'disabled'}.`);
+  ctx.session.ttsEnabled = !ctx.session.ttsEnabled;
+  ctx.reply(`Speech cognitive is now ${ctx.session.ttsEnabled ? 'enabled' : 'disabled'}.`);
 })
 
 bot.on("message", async (ctx) => {
@@ -99,7 +99,7 @@ bot.on("message", async (ctx) => {
         text: res.content ?? '',
       })
 
-      if (ctx.session.tts) {
+      if (ctx.session.ttsEnabled) {
         const speechStream = textToSpeech(res.content ?? '');
         if (speechStream) {
           const buffer = Buffer.from(await speechStream);

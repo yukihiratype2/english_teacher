@@ -5,7 +5,7 @@ import { ChatMessage } from "./types";
 export interface SessionData {
   messages: ChatMessage[],
   token?: string,
-  tts: boolean,
+  ttsEnabled: boolean,
 }
 
 export type TeacherContext = Context & SessionFlavor<SessionData>;
@@ -14,6 +14,6 @@ export type TeacherContext = Context & SessionFlavor<SessionData>;
 export function initial(): SessionData {
   return {
     messages: [],
-    tts: true
+    ttsEnabled: true
   };
 }
