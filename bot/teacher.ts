@@ -2,8 +2,8 @@ import OpenAI from 'openai';
 import { ChatMessage } from './types';
 
 const openai = new OpenAI({
-  apiKey: 'nk-OnlyBysd@41707', // defaults to process.env["OPENAI_API_KEY"]
-  baseURL: 'https://chat.taos7.top/api/openai/v1', // defaults to https://api.openai.com/v1
+  apiKey: 'sb-1723f4fda567d00b508959281f00f0046beb045595926a6e', // defaults to process.env["OPENAI_API_KEY"]
+  baseURL: 'https://api.openai-sb.com/v1', // defaults to https://api.openai.com/v1
 });
 
 
